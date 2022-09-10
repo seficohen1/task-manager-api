@@ -3,10 +3,12 @@ const express = require('express')
 const app = express()
 const PORT = 3000
 const tasks = require('./routes/tasks')
+const URL = process.env.MONGODB_URI
+
 
 const start = async () => {
   try {
-    await connectDB()
+    await connectDB(URL)
     console.log('DB CONNECTED ...')
     app.listen(PORT, console.log(`Server listening on port ${PORT}`))
   } catch (error) {
