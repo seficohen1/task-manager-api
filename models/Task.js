@@ -6,7 +6,10 @@ const TaskSchema = new mongoose.Schema({
     type: String,
     required: [true, 'must provide title to task']
   },
-  completed: Boolean
+  completed: {
+    type: Boolean,
+    default: false
+  }
 })
 
 module.exports = mongoose.model('Task', TaskSchema)

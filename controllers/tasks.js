@@ -26,13 +26,34 @@ const addNewTask = async (req, res) => {
 
 }
 
-const updateTask = (req, res) => {
-  const taskId = req.params.id
+const updateTask = async (req, res) => {
+ const {id: taskID} = req.params
+ 
 
+ try {  
+   const updatedTask = await Task.findOneAndUpdate({_id: taskID}, req.body, { 
+     new: true,
+     runValidators: true
+   })
+   res.json(updatedTask)
+
+   if(!updatedTask) return res.status(404).send('it seems like there is no task with id that matches your request')
+ } catch (error) {
+  res.status(500).send(error)
+ }
 }
 
-const deleteTask = (req, res) => {
-  res.send('deleting task')
+const deleteTask = async (req, res) => {
+  const {id: taskID} = req.params
+  try {
+    const task = await Task.findOneAndDelete({_id: taskID})
+    
+
+    if(!task) return res.status(404).send('it seems like there is no task with id that matches your request')
+    res.status(200).send(`task ${task.title} with ID ${taskID} has been deleted from DB`)
+  } catch (error) {
+    res.status(500).send(error)
+  }
 }
 
 const getSingleTask = async (req, res) => {
